@@ -1,0 +1,1063 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/Back.jpg">
+  <link rel="icon" href="/img/Back.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Eutop1a">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Redis常用指令1、字符串Stringredis中是使用字符串保存数值的，所以可以将数字或者布尔值也设置为value，具体的键和值都是大小写敏感的 设置一个键值对1SET key value  input: set cqupt 3Greceive: OK 获取键对应的值1GET key  input: get cquptreceive: “3G” 删除键值对1DEL key  input: de">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RedisCommendStudy">
+<meta property="og:url" content="http://example.com/2023/09/04/RedisCommendStudy/index.html">
+<meta property="og:site_name" content="Eutop1a">
+<meta property="og:description" content="Redis常用指令1、字符串Stringredis中是使用字符串保存数值的，所以可以将数字或者布尔值也设置为value，具体的键和值都是大小写敏感的 设置一个键值对1SET key value  input: set cqupt 3Greceive: OK 获取键对应的值1GET key  input: get cquptreceive: “3G” 删除键值对1DEL key  input: de">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/Redis.jpg">
+<meta property="article:published_time" content="2023-09-04T08:03:02.000Z">
+<meta property="article:modified_time" content="2023-09-16T02:56:33.611Z">
+<meta property="article:author" content="Eutop1a">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/Redis.jpg">
+  
+  
+  
+  <title>RedisCommendStudy - Eutop1a</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"6pUwop9tNFxd6Q6rYe3f1kQs-MdYXbMMI","app_key":"hDKkIoSEagPcJCUvmd3oI6Sh","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Eutop1a&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>Links</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/R-C.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="RedisCommendStudy"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-09-04 16:03" pubdate>
+          September 4, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.5k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          55 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> times
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">RedisCommendStudy</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="Redis常用指令"><a href="#Redis常用指令" class="headerlink" title="Redis常用指令"></a>Redis常用指令</h2><h3 id="1、字符串String"><a href="#1、字符串String" class="headerlink" title="1、字符串String"></a>1、字符串String</h3><p>redis中是使用字符串保存数值的，所以可以将数字或者布尔值也设置为value，具体的键和值都是大小写敏感的</p>
+<h5 id="设置一个键值对"><a href="#设置一个键值对" class="headerlink" title="设置一个键值对"></a>设置一个键值对</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">SET key value<br></code></pre></td></tr></table></figure>
+
+<p>input: set cqupt 3G<br>receive: OK</p>
+<h5 id="获取键对应的值"><a href="#获取键对应的值" class="headerlink" title="获取键对应的值"></a>获取键对应的值</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">GET key<br></code></pre></td></tr></table></figure>
+
+<p>input: get cqupt<br>receive: “3G”</p>
+<h5 id="删除键值对"><a href="#删除键值对" class="headerlink" title="删除键值对"></a>删除键值对</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">DEL key<br></code></pre></td></tr></table></figure>
+
+<p>input: del cqupt</p>
+<p>receive:  (integer) 1</p>
+<p>在删除后再获取</p>
+<p>input: get cqupt<br>receive: (nil)</p>
+<h5 id="判断一个键是否存在"><a href="#判断一个键是否存在" class="headerlink" title="判断一个键是否存在"></a>判断一个键是否存在</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">EXISTS key<br></code></pre></td></tr></table></figure>
+
+<p>input: EXISTS cqupt</p>
+<p>receive:  (integer) 0   表示不存在</p>
+<p>重新创建之后再exists就会发现返回(integer) 1</p>
+<h5 id="查看存在哪些键"><a href="#查看存在哪些键" class="headerlink" title="查看存在哪些键"></a>查看存在哪些键</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">KEYS pattern<br></code></pre></td></tr></table></figure>
+
+<p>pattern是一个模式，支持正则表达式</p>
+<p>例如 keys * 表示查找所有的键</p>
+<p>keys CQ* 表示所有以CQ开头的键</p>
+<h5 id="删除所有的键"><a href="#删除所有的键" class="headerlink" title="删除所有的键"></a>删除所有的键</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">FLUSHALL<br></code></pre></td></tr></table></figure>
+
+
+
+<p>删除之后再keys * </p>
+<p>得到(empty list or set)的回显</p>
+<h5 id="CLI的中文显示设置"><a href="#CLI的中文显示设置" class="headerlink" title="CLI的中文显示设置"></a>CLI的中文显示设置</h5><p>可以正常存储，但是直接打开redis-cli的话只能看到对应的十六进制数</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli --raw<br></code></pre></td></tr></table></figure>
+
+
+
+<h5 id="清空屏幕"><a href="#清空屏幕" class="headerlink" title="清空屏幕"></a>清空屏幕</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">clear<br></code></pre></td></tr></table></figure>
+
+
+
+<h5 id="设置带有过期时间的键值对"><a href="#设置带有过期时间的键值对" class="headerlink" title="设置带有过期时间的键值对"></a>设置带有过期时间的键值对</h5><p>TTL: Time To Live</p>
+<h6 id="查看过期时间"><a href="#查看过期时间" class="headerlink" title="查看过期时间"></a>查看过期时间</h6><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">TTL key<br></code></pre></td></tr></table></figure>
+
+<p>input: TTL cqupt</p>
+<p>receive:  -1  说明没有设置过期时间</p>
+<h6 id="设置过期时间"><a href="#设置过期时间" class="headerlink" title="设置过期时间"></a>设置过期时间</h6><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">TTL key duration<br></code></pre></td></tr></table></figure>
+
+<p>input: TTL cqupt 10 &#x2F;&#x2F; 设置10秒后过期</p>
+<p>receive:  1</p>
+<p>最后TTL key，收到-2，说明键值对已经过期</p>
+<p>最后再GET key ，没有输出，而且KEYS key也没有显示</p>
+<h6 id="使用SETEX设置带有过期时间的键值对"><a href="#使用SETEX设置带有过期时间的键值对" class="headerlink" title="使用SETEX设置带有过期时间的键值对"></a>使用SETEX设置带有过期时间的键值对</h6><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">SETEX key duration value<br></code></pre></td></tr></table></figure>
+
+<p>input: setex name 5 你好</p>
+<p>receive: OK</p>
+<h5 id="在键不存在时设置键的值"><a href="#在键不存在时设置键的值" class="headerlink" title="在键不存在时设置键的值"></a>在键不存在时设置键的值</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">SETNX key value<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="2、列表List"><a href="#2、列表List" class="headerlink" title="2、列表List"></a>2、列表List</h3><h4 id="将元素添加到列表的头部或尾部"><a href="#将元素添加到列表的头部或尾部" class="headerlink" title="将元素添加到列表的头部或尾部"></a>将元素添加到列表的头部或尾部</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">LPUSH key value <br>RPUSH key value<br></code></pre></td></tr></table></figure>
+
+<p>LPUSH letter a</p>
+<p>LPUSH letter b</p>
+<h4 id="获取列表内容"><a href="#获取列表内容" class="headerlink" title="获取列表内容"></a>获取列表内容</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">LRANGE key start stop<br></code></pre></td></tr></table></figure>
+
+<p>LRANGE letter 0 -1 	-1表示到最后一个元素</p>
+<h4 id="添加多个元素"><a href="#添加多个元素" class="headerlink" title="添加多个元素"></a>添加多个元素</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">LPUSH key element [element ...]<br></code></pre></td></tr></table></figure>
+
+<p>LPUSH letter c d e</p>
+<p>&gt; <strong>LRANGE letter 0 -1</strong> 1) “e” 2) “d” 3) “c” 4) “c” 5) “b” 6) “a”</p>
+<p>可以看到顺序是反的</p>
+<h4 id="删除头部或尾部的元素"><a href="#删除头部或尾部的元素" class="headerlink" title="删除头部或尾部的元素"></a>删除头部或尾部的元素</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">LPOP key [count]<br>RPOP key [count]<br></code></pre></td></tr></table></figure>
+
+<p>RPOP letter </p>
+<p>一次删除多个元素</p>
+<p>LPOP letter 2</p>
+<h4 id="查看列表的长度"><a href="#查看列表的长度" class="headerlink" title="查看列表的长度"></a>查看列表的长度</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">LLEN key<br></code></pre></td></tr></table></figure>
+
+
+
+<p>RPOPLPUSH实现一个简单的消息队列</p>
+<p>删除列表中指定范围以外的元素</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">LTRIM key start stop<br></code></pre></td></tr></table></figure>
+
+<p>意思是只保留start和stop之内的元素</p>
+<p>LTRIM letter 1 3</p>
+<h3 id="3、集合Set"><a href="#3、集合Set" class="headerlink" title="3、集合Set"></a>3、集合Set</h3><h4 id="set和列表的区别"><a href="#set和列表的区别" class="headerlink" title="set和列表的区别"></a>set和列表的区别</h4><p>set是无序的，但是元素不能重复；list是有序的，元素可以重复</p>
+<h4 id="向set中添加元素"><a href="#向set中添加元素" class="headerlink" title="向set中添加元素"></a>向set中添加元素</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">SADD key member [member ...]<br></code></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<p><strong>SADD course Redis</strong></p>
+<p>或者：</p>
+<p><strong>SADD course Redis MySQL</strong></p>
+<h4 id="查看集合中的元素"><a href="#查看集合中的元素" class="headerlink" title="查看集合中的元素"></a>查看集合中的元素</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">SMEMBERS key<br></code></pre></td></tr></table></figure>
+
+<p>&gt; <strong>SMEMBERs course</strong> </p>
+<p>1)”MySQL”</p>
+<ol start="2">
+<li>“Redis”</li>
+</ol>
+<h4 id="判断一个元素是否在集合中"><a href="#判断一个元素是否在集合中" class="headerlink" title="判断一个元素是否在集合中"></a>判断一个元素是否在集合中</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">SISMEMBER key member<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="删除集合中的元素"><a href="#删除集合中的元素" class="headerlink" title="删除集合中的元素"></a>删除集合中的元素</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">SREM key member [member ...]<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="计算集合的交集"><a href="#计算集合的交集" class="headerlink" title="计算集合的交集"></a>计算集合的交集</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">SINTER key [key ...]<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="计算集合的差集"><a href="#计算集合的差集" class="headerlink" title="计算集合的差集"></a>计算集合的差集</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">SDIFF key [key ...]<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="计算集合的并集"><a href="#计算集合的并集" class="headerlink" title="计算集合的并集"></a>计算集合的并集</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">SUNION key [key ...]<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="4、有序集合SortedSet"><a href="#4、有序集合SortedSet" class="headerlink" title="4、有序集合SortedSet"></a>4、有序集合SortedSet</h3><p>集合中的每个元素都会关联一个浮点类型的分数，根据这个分数从小到大排序</p>
+<p>成员是唯一的，但是分数是可以重复的</p>
+<h4 id="向有序集合中添加元素"><a href="#向有序集合中添加元素" class="headerlink" title="向有序集合中添加元素"></a>向有序集合中添加元素</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell">ZADD key [NX | XX] [GT | LT] [CH] [INCR] score member [score member ...]<br><br>Required key<br>Optional [NX | XX]<br>Optional [GT | LT]<br>Optional [CH]<br>Optional [INCR]<br>Multiple score member<br></code></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<p>input: ZADD result 680 清华 660 北大 650 复旦 640 浙大</p>
+<p> result: 4</p>
+<h4 id="查看有序集合中的元素"><a href="#查看有序集合中的元素" class="headerlink" title="查看有序集合中的元素"></a>查看有序集合中的元素</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ZRANGE key start stop [BYSCORE | BYLEX] [REV] [LIMIT offset count] [WITHSCORES]<br></code></pre></td></tr></table></figure>
+
+<p>例如</p>
+<p>127.0.0.1:6379&gt; ZRANGE result 0 -1<br>浙大<br>复旦<br>北大<br>清华</p>
+<p>在输出成员的时候输出分数</p>
+<p>127.0.0.1:6379&gt; ZRANGE result 0 -1 WITHSCORES<br>浙大<br>640<br>复旦<br>650<br>北大<br>660<br>清华<br>680</p>
+<h4 id="查看某个成员的值"><a href="#查看某个成员的值" class="headerlink" title="查看某个成员的值"></a>查看某个成员的值</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ZSCORE key member<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="查看某个成员的排名"><a href="#查看某个成员的排名" class="headerlink" title="查看某个成员的排名"></a>查看某个成员的排名</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ZRANK key member [WITHSCORE]<br></code></pre></td></tr></table></figure>
+
+<h4 id="查看从大到小的排名"><a href="#查看从大到小的排名" class="headerlink" title="查看从大到小的排名"></a>查看从大到小的排名</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ZREVRANK key member [WITHSCORE]<br></code></pre></td></tr></table></figure>
+
+<h4 id="删除有序集合中的某个成员"><a href="#删除有序集合中的某个成员" class="headerlink" title="删除有序集合中的某个成员"></a>删除有序集合中的某个成员</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ZREM key member [member ...]<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="5、哈希Hash"><a href="#5、哈希Hash" class="headerlink" title="5、哈希Hash"></a>5、哈希Hash</h3><h4 id="向hash中添加一个键值对"><a href="#向hash中添加一个键值对" class="headerlink" title="向hash中添加一个键值对"></a>向hash中添加一个键值对</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">HSET key field value [field value ...]<br></code></pre></td></tr></table></figure>
+
+<p>input: HSET person name WCL</p>
+<p>input: HSET person age 20</p>
+<p>也可以是</p>
+<p>intput: HSET person name WCL age 20</p>
+<h4 id="获取hash中的某个键值对"><a href="#获取hash中的某个键值对" class="headerlink" title="获取hash中的某个键值对"></a>获取hash中的某个键值对</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">HGET key field<br></code></pre></td></tr></table></figure>
+
+<p>input: HGET person name</p>
+<p>result: “WCL”</p>
+<h4 id="获取hash中的所有键值对"><a href="#获取hash中的所有键值对" class="headerlink" title="获取hash中的所有键值对"></a>获取hash中的所有键值对</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">HGETALL key<br></code></pre></td></tr></table></figure>
+
+<p>input: HGETALL person </p>
+<p>result: \1) “name” 2) “WCL” 3) “age” 4) “20”</p>
+<h4 id="删除hash中的某个键值对"><a href="#删除hash中的某个键值对" class="headerlink" title="删除hash中的某个键值对"></a>删除hash中的某个键值对</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">HDEL key field [field ...]<br></code></pre></td></tr></table></figure>
+
+<p>input: HDEL person age</p>
+<h4 id="判断某个键值对是否存在"><a href="#判断某个键值对是否存在" class="headerlink" title="判断某个键值对是否存在"></a>判断某个键值对是否存在</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">HEXISTS key field<br></code></pre></td></tr></table></figure>
+
+<p>input: HEXISTS person name</p>
+<h4 id="获取hash中的所有键"><a href="#获取hash中的所有键" class="headerlink" title="获取hash中的所有键"></a>获取hash中的所有键</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">HKEYS key<br></code></pre></td></tr></table></figure>
+
+<p>input: HKEYS person</p>
+<p>result: 1) “name”</p>
+<h4 id="获取所有键的数量"><a href="#获取所有键的数量" class="headerlink" title="获取所有键的数量"></a>获取所有键的数量</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">HLEN key<br></code></pre></td></tr></table></figure>
+
+<p>input: HLEN person</p>
+<p>result: (integer) 1</p>
+<h3 id="6、发布订阅模式"><a href="#6、发布订阅模式" class="headerlink" title="6、发布订阅模式"></a>6、发布订阅模式</h3><p>可以有多个订阅，这样在一个频道发布消息的时候，所有的订阅频道就会收到消息</p>
+<h4 id="订阅一个频道"><a href="#订阅一个频道" class="headerlink" title="订阅一个频道"></a>订阅一个频道</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">SUBSCRIBE channel [channel ...]<br></code></pre></td></tr></table></figure>
+
+<h4 id="发布消息"><a href="#发布消息" class="headerlink" title="发布消息"></a>发布消息</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">PUBLISH channel message<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="7、消息队列Stream"><a href="#7、消息队列Stream" class="headerlink" title="7、消息队列Stream"></a>7、消息队列Stream</h3><h4 id="向Stream中添加消息"><a href="#向Stream中添加消息" class="headerlink" title="向Stream中添加消息"></a>向Stream中添加消息</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">XADD key [NOMKSTREAM] [MAXLEN | MINID [= | ~] threshold [LIMIT count]] * | id field value [field value ...]<br></code></pre></td></tr></table></figure>
+
+<p>input: </p>
+<p>XADD geekhour * course redis &#x2F;&#x2F;  * 表示让redis自己指定id，同时保证id是自增的</p>
+<p>result: (消息id)</p>
+<p>“1693972260450-0”</p>
+<p>XADD geekhour * course git</p>
+<p> “1693972263302-0”</p>
+<p>XADD geekhour * course docker</p>
+<p>“1693972270408-0”</p>
+<h5 id="指定ID添加消息"><a href="#指定ID添加消息" class="headerlink" title="指定ID添加消息"></a>指定ID添加消息</h5><p>id格式是：时间戳-序列号</p>
+<p>XADD geekhour 1-0 course git</p>
+<p>XADD geekhour 2-0 course docker</p>
+<p>XADD geekhour 3-0 course docker</p>
+<h4 id="查看stream中消息的数量"><a href="#查看stream中消息的数量" class="headerlink" title="查看stream中消息的数量"></a>查看stream中消息的数量</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">XLEN key<br></code></pre></td></tr></table></figure>
+
+<p>input:</p>
+<p>XLEN geekhour</p>
+<p>result:</p>
+<p>(integer) 3</p>
+<h4 id="查看消息的详细内容"><a href="#查看消息的详细内容" class="headerlink" title="查看消息的详细内容"></a>查看消息的详细内容</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">XRANGE key start end [COUNT count]<br></code></pre></td></tr></table></figure>
+
+<p>可以用 - + 代表全体</p>
+<p>XRANGE geekhour - +</p>
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230906115452722.png" srcset="/img/loading.gif" lazyload alt="image-20230906115452722"></p>
+<h4 id="删除消息"><a href="#删除消息" class="headerlink" title="删除消息"></a>删除消息</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">XDEL key id [id ...]<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230906115634274.png" srcset="/img/loading.gif" lazyload alt="image-20230906115634274"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">XTRIM key MAXLEN | MINID [= | ~] threshold [LIMIT count]<br></code></pre></td></tr></table></figure>
+
+
+
+<p>XTRIM geekhour MAXLEN 0 &#x2F;&#x2F; 表示删除所有消息</p>
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230906115847294.png" srcset="/img/loading.gif" lazyload alt="image-20230906115847294"></p>
+<h4 id="读取消息"><a href="#读取消息" class="headerlink" title="读取消息"></a>读取消息</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">XREAD [COUNT count] [BLOCK milliseconds] STREAMS key [key ...] id [id ...]<br>// COUNT 是指定一次获取的消息数量<br>// BLOCK 是指定没有获取到消息时阻塞的时间，单位毫秒<br></code></pre></td></tr></table></figure>
+
+<p>XREAD COUNT 2 BLOCk 1000 STREAMS geekhour 0 &#x2F;&#x2F; 0 表示从头读取</p>
+<p>XREAD COUNT 2 BLOCk 1000 STREAMS geekhour 1 &#x2F;&#x2F; 1 表示从第二条消息开始读取</p>
+<p>XREAD COUNT 2 BLOCk 1000 STREAMS geekhour $ &#x2F;&#x2F; $ 表示获取从现在开始最新的消息</p>
+<p>同时这个消息可以重复读取</p>
+<h4 id="创建消费者组"><a href="#创建消费者组" class="headerlink" title="创建消费者组"></a>创建消费者组</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">XGROUP CREATE key group id | $ [MKSTREAM] [ENTRIESREAD entries-read]<br></code></pre></td></tr></table></figure>
+
+<p>XGROUP CREATE geekhour group1 0 &#x2F;&#x2F; 创建一个名为group1的消费者组，0 是id</p>
+<h4 id="获取消费者组的信息"><a href="#获取消费者组的信息" class="headerlink" title="获取消费者组的信息"></a>获取消费者组的信息</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">XINFO GROUPS key<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230906121200896.png" srcset="/img/loading.gif" lazyload alt="image-20230906121200896"></p>
+<h4 id="向消费者组中添加消费者"><a href="#向消费者组中添加消费者" class="headerlink" title="向消费者组中添加消费者"></a>向消费者组中添加消费者</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">XGROUP CREATECONSUMER key group consumer<br></code></pre></td></tr></table></figure>
+
+<p>XGROUP CREATECONSUMER geekhour group1 consumer1</p>
+<h4 id="读取消息-1"><a href="#读取消息-1" class="headerlink" title="读取消息"></a>读取消息</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">XREADGROUP GROUP group consumer [COUNT count] [BLOCK milliseconds] [NOACK] STREAMS key [key ...] id [id ...]<br></code></pre></td></tr></table></figure>
+
+<p>&#x2F;&#x2F; &gt; 表示获取最新的消息</p>
+<p> XREADGROUP GROUP group1 consumer1 COUNT 2 BLOCK 3000 STREAMS geekhour &gt; </p>
+<h3 id="8、地理空间Geospatial"><a href="#8、地理空间Geospatial" class="headerlink" title="8、地理空间Geospatial"></a>8、地理空间Geospatial</h3><h4 id="添加地理位置信息"><a href="#添加地理位置信息" class="headerlink" title="添加地理位置信息"></a>添加地理位置信息</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">GEOADD key [NX | XX] [CH] longitude latitude member [longitude latitude member ...]<br></code></pre></td></tr></table></figure>
+
+
+
+<p>GEOADD city 116.405285 39.904989 beijing</p>
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230906194821964.png" srcset="/img/loading.gif" lazyload alt="image-20230906194821964"></p>
+<p>一次添加多个地理位置信息</p>
+<p>GEOADD city 121.472644 31.231706 shanghai 114.085947 22.547 shenzhen<br>37 23.125178 guangzhou 120.153576 30.287459 hangzhou</p>
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230906195525624.png" srcset="/img/loading.gif" lazyload alt="image-20230906195525624"></p>
+<h4 id="获取某个地理位置的经纬度"><a href="#获取某个地理位置的经纬度" class="headerlink" title="获取某个地理位置的经纬度"></a>获取某个地理位置的经纬度</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">GEOPOS key [member [member ...]]<br></code></pre></td></tr></table></figure>
+
+<p>GEOPOS city beijing</p>
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230906195619750.png" srcset="/img/loading.gif" lazyload alt="image-20230906195619750"></p>
+<h4 id="计算两个地理位置之间的距离"><a href="#计算两个地理位置之间的距离" class="headerlink" title="计算两个地理位置之间的距离"></a>计算两个地理位置之间的距离</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">GEODIST key member1 member2 [M | KM | FT | MI]<br></code></pre></td></tr></table></figure>
+
+<p>GEODIST city beijing shanghai</p>
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230906195724372.png" srcset="/img/loading.gif" lazyload alt="image-20230906195724372"></p>
+<p>默认返回的单位是M，如果要返回km的话就在最后加上km</p>
+<p>GEODIST city beijing shanghai km</p>
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230906195845016.png" srcset="/img/loading.gif" lazyload alt="image-20230906195845016"></p>
+<h4 id="搜索指定范围内的成员（需要redis版本-gt-6-2）"><a href="#搜索指定范围内的成员（需要redis版本-gt-6-2）" class="headerlink" title="搜索指定范围内的成员（需要redis版本 &gt; 6.2）"></a>搜索指定范围内的成员（需要redis版本 &gt; 6.2）</h4><p>这个范围可以是以一个指定的经纬度或者成员的位置为中心，以圆形或者矩形的范围搜索</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">GEOSEARCH key FROMMEMBER member | FROMLONLAT longitude latitude BYRADIUS radius M | KM | FT | MI | BYBOX width height M | KM | FT | MI [ASC | DESC] [COUNT count [ANY]] [WITHCOORD] [WITHDIST] [WITHHASH]<br></code></pre></td></tr></table></figure>
+
+
+
+<p>&#x2F;&#x2F; BYRADIUS 表示一个圆形的范围</p>
+<p>寻找</p>
+<p>GEOSEARCH city FROMMEMBER shanghai BYRADIUS 300 km</p>
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230906201117951.png" srcset="/img/loading.gif" lazyload alt="image-20230906201117951"></p>
+<h3 id="9、HyperLogLog"><a href="#9、HyperLogLog" class="headerlink" title="9、HyperLogLog"></a>9、HyperLogLog</h3><p>用于计算集合的基数</p>
+<p>使用随机算法计算，通过牺牲一定的精确度来换取更小的内存消耗，适合用于计算基数大但是对精度要求不是很高的统计工作</p>
+<h4 id="添加一个元素"><a href="#添加一个元素" class="headerlink" title="添加一个元素"></a>添加一个元素</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">PFADD key [element [element ...]]<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="查看基数"><a href="#查看基数" class="headerlink" title="查看基数"></a>查看基数</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">PFCOUNT key [key ...]<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230907221102331.png" srcset="/img/loading.gif" lazyload alt="image-20230907221102331"></p>
+<h4 id="合并集合"><a href="#合并集合" class="headerlink" title="合并集合"></a>合并集合</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">PFMERGE destkey [sourcekey [sourcekey ...]]<br></code></pre></td></tr></table></figure>
+
+<p>将sourcekey的值合并放入destkey中</p>
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230907221353718.png" srcset="/img/loading.gif" lazyload alt="image-20230907221353718"></p>
+<h3 id="10、位图-Bitmap"><a href="#10、位图-Bitmap" class="headerlink" title="10、位图 Bitmap"></a>10、位图 Bitmap</h3><p>位图是字符串类型的扩展，可以用string数组模拟一个bit数组，数组的下标就是偏移量，值只有0和1，支持一些位运算</p>
+<h4 id="设置偏移量的值"><a href="#设置偏移量的值" class="headerlink" title="设置偏移量的值"></a>设置偏移量的值</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">SETBIT key offset value<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230907221833920.png" srcset="/img/loading.gif" lazyload alt="image-20230907221833920"></p>
+<h4 id="获取某个偏移量的值"><a href="#获取某个偏移量的值" class="headerlink" title="获取某个偏移量的值"></a>获取某个偏移量的值</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">GETBIT key offset<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230907221912538.png" srcset="/img/loading.gif" lazyload alt="image-20230907221912538"></p>
+<p>但是这样一位一位的设置很麻烦，由于Bitmap实际上是字符串，所以可以直接使用字符串的命令尝试批量赋值</p>
+<p>‘\xF0’表示的就是 1111 0000</p>
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230907222537739.png" srcset="/img/loading.gif" lazyload alt="image-20230907222537739"></p>
+<p>所以这个实际上就是设置一个bitmap的前四位为1，后四位为0</p>
+<h4 id="统计bitmap中有多少个1"><a href="#统计bitmap中有多少个1" class="headerlink" title="统计bitmap中有多少个1"></a>统计bitmap中有多少个1</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">BITCOUNT key<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230907222642998.png" srcset="/img/loading.gif" lazyload alt="image-20230907222642998"></p>
+<h4 id="获取某个位置第一个出现的0或者1的位置"><a href="#获取某个位置第一个出现的0或者1的位置" class="headerlink" title="获取某个位置第一个出现的0或者1的位置"></a>获取某个位置第一个出现的0或者1的位置</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">BITPOS key bit [start [end [BYTE | BIT]]]<br></code></pre></td></tr></table></figure>
+
+<p>start和end可以指定一个区间，在这个区间范围内搜索</p>
+<p>可以看到test第一个0出现在第一位，第一个1出现在第二位</p>
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230907222825830.png" srcset="/img/loading.gif" lazyload alt="image-20230907222825830"></p>
+<h3 id="11、位域Bitfield"><a href="#11、位域Bitfield" class="headerlink" title="11、位域Bitfield"></a>11、位域Bitfield</h3><p>将很多小的整数存储到一个较大的位图中 -&gt; 为了更高效的内存使用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">BITFIELD key [GET encoding offset | [OVERFLOW WRAP | SAT | FAIL] SET encoding offset value | INCRBY encoding offset increment [GET encoding offset | [OVERFLOW WRAP | SAT | FAIL] SET encoding offset value | INCRBY encoding offset increment ...]]<br></code></pre></td></tr></table></figure>
+
+<h4 id="新建一个位域-gt-set"><a href="#新建一个位域-gt-set" class="headerlink" title="新建一个位域-&gt; set"></a>新建一个位域-&gt; set</h4><p>BITFIELD player:1 set u8 #0 1</p>
+<p>u8表示是无符号uint8，#0表示第一个位置</p>
+<p>用GET key查看内存中的情况</p>
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230909192621847.png" srcset="/img/loading.gif" lazyload alt="image-20230909192621847"></p>
+<h4 id="获取位域信息-gt-get"><a href="#获取位域信息-gt-get" class="headerlink" title="获取位域信息 -&gt; get"></a>获取位域信息 -&gt; get</h4><p>BITFIELD player:1 get u8 #0 </p>
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230909193005187.png" srcset="/img/loading.gif" lazyload alt="image-20230909193005187"></p>
+<p>继续新建</p>
+<p>#1 表示第二个位置</p>
+<p>BITFIELD player:1 set u32 #1 100</p>
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230909193142016.png" srcset="/img/loading.gif" lazyload alt="image-20230909193142016"></p>
+<h4 id="增加对应的值"><a href="#增加对应的值" class="headerlink" title="增加对应的值"></a>增加对应的值</h4><p>BITFIELD player:1 incrby u32 #1 100</p>
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230909193449138.png" srcset="/img/loading.gif" lazyload alt="image-20230909193449138"></p>
+<h3 id="12、事务"><a href="#12、事务" class="headerlink" title="12、事务"></a>12、事务</h3><p>MULTI 开启一个事务</p>
+<p>EXEC 执行一个事务</p>
+<p>事务并不能保证所有的命令都执行成功，执行结果取决于事务中的命令</p>
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230909194400061.png" srcset="/img/loading.gif" lazyload alt="image-20230909194400061"></p>
+<p>事务中任意一个任务执行失败都不会导致其他任务的执行</p>
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230909194554484.png" srcset="/img/loading.gif" lazyload alt="image-20230909194554484"></p>
+<h3 id="13、持久化"><a href="#13、持久化" class="headerlink" title="13、持久化"></a>13、持久化</h3><p>redis实现持久化的方式有两种</p>
+<p>1、RDB (Redis Database) 在指定时间内把redis的内存快照保存到磁盘中，更适合做备份</p>
+<p>2、AOF (Append Only File)</p>
+<h4 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h4><p>RDB的参数在redis.conf文件中</p>
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230909195223242.png" srcset="/img/loading.gif" lazyload alt="image-20230909195223242"></p>
+<p>也可以用save命令直接触发快照</p>
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230909195740647.png" srcset="/img/loading.gif" lazyload alt="image-20230909195740647"></p>
+<h5 id="bgsave"><a href="#bgsave" class="headerlink" title="bgsave"></a>bgsave</h5><p>单独创建一个子进程，将内存中的数据写入到硬盘中</p>
+<p>但是fork一个子进程也需要时间，在这段时间内redis不能进行其他操作</p>
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230909200046470.png" srcset="/img/loading.gif" lazyload alt="image-20230909200046470"></p>
+<h4 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h4><p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230909200357580.png" srcset="/img/loading.gif" lazyload alt="image-20230909200357580"></p>
+<h3 id="14、主从复制"><a href="#14、主从复制" class="headerlink" title="14、主从复制"></a>14、主从复制</h3><p>指的是将一台redis服务器（主节点(master)）的内容复制到其他redis服务器（从节点(slave)）</p>
+<p>主节点负责写操作，从节点负责读操作</p>
+<p>主节点把数据变化通过异步的方式发送给从节点</p>
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230909200922665.png" srcset="/img/loading.gif" lazyload alt="image-20230909200922665"></p>
+<h3 id="15、哨兵模式Sentinel"><a href="#15、哨兵模式Sentinel" class="headerlink" title="15、哨兵模式Sentinel"></a>15、哨兵模式Sentinel</h3><p>以一个独立的进程允许在redis中，用来监控redis集群中的各个节点是否允许正常</p>
+<p>1、监控：</p>
+<p>​	通过不断地发送命令来检查redis节点是否正常</p>
+<p>2、通知：</p>
+<p>​	如果某个redis节点异常了，哨兵就会通过发布订阅模式来通知其他节点</p>
+<p>3、自动故障转移：<br>    当主节点不能正常工作的时候，哨兵开始一个自动故障转移的操作，将一个从节点升级为新的主节点，然后再将其他的从节点指向新的主节点，</p>
+<h4 id="redis-sentinel-sentinel-conf-启动哨兵节点"><a href="#redis-sentinel-sentinel-conf-启动哨兵节点" class="headerlink" title="redis -sentinel sentinel.conf 启动哨兵节点"></a>redis -sentinel sentinel.conf 启动哨兵节点</h4><p>先新建一个配置文件 sentinel.conf</p>
+<p><img src="https://renovice-1311449499.cos.ap-chongqing.myqcloud.com/image-20230909202158333.png" srcset="/img/loading.gif" lazyload alt="image-20230909202158333"></p>
+<p>master是主节点的名字，最后的1表示只需要一个哨兵节点同意就可以进行故障转移了</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/SQL/" class="category-chain-item">SQL</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Redis/">#Redis</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>RedisCommendStudy</div>
+      <div>http://example.com/2023/09/04/RedisCommendStudy/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Eutop1a</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>September 4, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/09/06/SQLCheatSheet/" title="SQLCheatSheet">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">SQLCheatSheet</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/09/04/leetcode/" title="leetcode">
+                        <span class="hidden-mobile">leetcode</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"6pUwop9tNFxd6Q6rYe3f1kQs-MdYXbMMI","appKey":"hDKkIoSEagPcJCUvmd3oI6Sh","path":"window.location.pathname","placeholder":"Say something","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"en-US","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":"ture"},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
